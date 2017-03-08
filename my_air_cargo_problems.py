@@ -46,18 +46,14 @@ class AirCargoProblem(Problem):
             list of Action objects
         '''
 
-        # TODO create concrete Action objects based on the domain action schema for: Load, Unload, and Fly
-        # concrete actions definition: specific literal action that does not include variables as with the schema
-        # for example, the action schema 'Load(c, p, a)' can represent the concrete actions 'Load(C1, P1, SFO)'
-        # or 'Load(C2, P2, JFK)'.  The actions for the planning problem must be concrete because the problems in
-        # forward search and Planning Graphs must use Propositional Logic
-
         def load_actions():
             '''Create all concrete Load actions and return a list
 
+            ```
             Action(Load(c, p, a),
-            PRECOND: At(c, a) ∧ At(p, a) ∧ Cargo(c) ∧ Plane(p) ∧ Airport(a)
-            EFFECT: ¬ At(c, a) ∧ In(c, p))
+                PRECOND: At(c, a) ∧ At(p, a) ∧ Cargo(c) ∧ Plane(p) ∧ Airport(a)
+                EFFECT: ¬ At(c, a) ∧ In(c, p))
+            ```
 
             :return: list of Action objects
             '''
@@ -80,10 +76,25 @@ class AirCargoProblem(Problem):
         def unload_actions():
             '''Create all concrete Unload actions and return a list
 
+            ```
+            Action(Unload(c, p, a),
+                PRECOND: In(c, p) ∧ At(p, a) ∧ Cargo(c) ∧ Plane(p) ∧ Airport(a)
+                EFFECT: At(c, a) ∧ ¬ In(c, p))
+            ```
             :return: list of Action objects
             '''
             unloads = []
-            # TODO create all Unload ground actions from the domain Unload action
+            for cargo in self.cargos:
+                for plane in self.planes:
+                    for airport in self.airports:
+                        precond_pos = [expr(f'In({cargo}, {plane})'), expr(f'At({plane}, {airport})')]
+                        precond_neg = []
+                        effect_add = [expr(f'At({cargo}, {airport})')]
+                        effect_rem = [expr(f'In({cargo}, {plane})')]
+                        unload = Action(expr(f'Unload({cargo}, {plane}, {airport})'),
+                                      [precond_pos, precond_neg],
+                                      [effect_add, effect_rem])
+                        unloads.append(unload)
             return unloads
 
         def fly_actions():
