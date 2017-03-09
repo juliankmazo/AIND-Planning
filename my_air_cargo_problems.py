@@ -1,3 +1,4 @@
+from itertools import product
 from aimacode.logic import PropKB
 from aimacode.planning import Action
 from aimacode.search import (
@@ -58,18 +59,16 @@ class AirCargoProblem(Problem):
             :return: list of Action objects
             '''
             loads = []
-            for cargo in self.cargos:
-                for plane in self.planes:
-                    for airport in self.airports:
-                        precond_pos = [expr(f'At({cargo}, {airport})'), expr(f'At({plane}, {airport})')]
-                        precond_neg = []
-                        effect_add = [expr(f'In({cargo}, {plane})')]
-                        effect_rem = [expr(f'At({cargo}, {airport})')]
-                        load = Action(expr(f'Load({cargo}, {plane}, {airport})'),
-                                      [precond_pos, precond_neg],
-                                      [effect_add, effect_rem])
-                        loads.append(load)
-
+            action_combination_iter = product(self.cargos, self.planes, self.airports)
+            for cargo, plane, airport in action_combination_iter:
+                precond_pos = [expr(f'At({cargo}, {airport})'), expr(f'At({plane}, {airport})')]
+                precond_neg = []
+                effect_add = [expr(f'In({cargo}, {plane})')]
+                effect_rem = [expr(f'At({cargo}, {airport})')]
+                load = Action(expr(f'Load({cargo}, {plane}, {airport})'),
+                                [precond_pos, precond_neg],
+                                [effect_add, effect_rem])
+                loads.append(load)
 
             return loads
 
@@ -84,17 +83,16 @@ class AirCargoProblem(Problem):
             :return: list of Action objects
             '''
             unloads = []
-            for cargo in self.cargos:
-                for plane in self.planes:
-                    for airport in self.airports:
-                        precond_pos = [expr(f'In({cargo}, {plane})'), expr(f'At({plane}, {airport})')]
-                        precond_neg = []
-                        effect_add = [expr(f'At({cargo}, {airport})')]
-                        effect_rem = [expr(f'In({cargo}, {plane})')]
-                        unload = Action(expr(f'Unload({cargo}, {plane}, {airport})'),
-                                      [precond_pos, precond_neg],
-                                      [effect_add, effect_rem])
-                        unloads.append(unload)
+            action_combination_iter = product(self.cargos, self.planes, self.airports)
+            for cargo, plane, airport in action_combination_iter:
+                precond_pos = [expr(f'In({cargo}, {plane})'), expr(f'At({plane}, {airport})')]
+                precond_neg = []
+                effect_add = [expr(f'At({cargo}, {airport})')]
+                effect_rem = [expr(f'In({cargo}, {plane})')]
+                unload = Action(expr(f'Unload({cargo}, {plane}, {airport})'),
+                                [precond_pos, precond_neg],
+                                [effect_add, effect_rem])
+                unloads.append(unload)
             return unloads
 
         def fly_actions():
@@ -107,19 +105,17 @@ class AirCargoProblem(Problem):
             :return: list of Action objects
             '''
             flys = []
-            for fr in self.airports:
-                for to in self.airports:
-                    if fr != to:
-                        for p in self.planes:
-                            precond_pos = [expr("At({}, {})".format(p, fr)),
-                                           ]
-                            precond_neg = []
-                            effect_add = [expr("At({}, {})".format(p, to))]
-                            effect_rem = [expr("At({}, {})".format(p, fr))]
-                            fly = Action(expr("Fly({}, {}, {})".format(p, fr, to)),
-                                         [precond_pos, precond_neg],
-                                         [effect_add, effect_rem])
-                            flys.append(fly)
+            action_combination_iter = product(self.airports, self.airports, self.planes)
+            for frm, to, plane in action_combination_iter:
+                if frm != to:
+                    precond_pos = [expr(f'At({plane}, {frm})')]
+                    precond_neg = []
+                    effect_add = [expr(f'At({plane}, {to})')]
+                    effect_rem = [expr(f'At({plane}, {frm})')]
+                    fly = Action(expr('Fly({plane}, {frm}, {to})'),
+                                    [precond_pos, precond_neg],
+                                    [effect_add, effect_rem])
+                    flys.append(fly)
             return flys
 
         return load_actions() + unload_actions() + fly_actions()
