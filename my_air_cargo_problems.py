@@ -194,7 +194,6 @@ class AirCargoProblem(Problem):
         conditions by ignoring the preconditions required for an action to be
         executed.
         '''
-        # TODO implement (see Russell-Norvig Ed-3 10.2.3  or Russell-Norvig Ed-2 11.2)
         return len([s for (i, s) in enumerate(self.state_map)
                      if s in self.goal and node.state[i] == "F"])
 
