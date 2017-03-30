@@ -14,7 +14,7 @@ Goal(At(C1, JFK) ∧ At(C2, SFO))
 ```
 
 #### Solution:
-Lenght: 6
+Length: 6
 ```
 Load(C1, P1, SFO)
 Load(C2, P2, JFK)
@@ -60,7 +60,7 @@ Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD)
 Goal(At(C1, JFK) ∧ At(C3, JFK) ∧ At(C2, SFO) ∧ At(C4, SFO))
 ```
 #### Solution:
-Lenght: 12
+Length: 12
 ```
 Load(C2, P2, JFK)
 Fly(P2, JFK, ORD)
@@ -88,11 +88,11 @@ Unload(C1, P1, JFK)
 | 3. depth_first_graph_search                      | 20        | 21       | 22       | 84      | 0.017          |
 | 4. depth_limited_search                          | 50        | 101      | 271      | 414     | 0.107          |
 | 5. uniform_cost_search                           | 6         | 55       | 57       | 224     | 0.050          |
-| 6. recursive_best_first_search with h_1          | 6         | 4229     | 4230     | 17023   | 3.329          |
-| 7. greedy_best_first_graph_search with h_1       | 6         | 7        | 9        | 28      | 0.006          |
-| 8. astar_search with h_1                         | 6         | 55       | 57       | 224     | 0.046          |
-| 9. astar_search with h_ignore_preconditions      | 6         | 41       | 43       | 170     | 0.039          |
-| 10. Astar_search with h_pg_levelsum              | 6         | 11       | 13       | 50      | 1.517          |
+| 6. recursive_best_first_search_with_h_1          | 6         | 4229     | 4230     | 17023   | 3.329          |
+| 7. greedy_best_first_graph_search_with_h_1       | 6         | 7        | 9        | 28      | 0.006          |
+| 8. astar_search_with_h_1                         | 6         | 55       | 57       | 224     | 0.046          |
+| 9. astar_search_with_h_ignore_preconditions      | 6         | 41       | 43       | 170     | 0.039          |
+| 10. astar_search_with_h_pg_levelsum              | 6         | 11       | 13       | 50      | 1.517          |
 
 ### P2
 
@@ -103,13 +103,13 @@ Unload(C1, P1, JFK)
 | 3. depth_first_graph_search                      | 619       | 624      | 625      | 5602    | 3.332          |
 | 4. depth_limited_search                          | 50        | 222719   | 2053741  | 2054119 | 905.32         |
 | 5. uniform_cost_search                           | 9         | 4853     | 4855     | 44041   | 40.349         |
-| 6. recursive_best_first_search with h_1          | --        | --       | --       | --      | timeout        |
-| 7. greedy_best_first_graph_search with h_1       | 21        | 998      | 1000     | 8982    | 7.427          |
-| 8. astar_search with h_1                         | 9         | 4853     | 4855     | 44041   | 41.251         |
-| 9. astar_search with h_ignore_preconditions      | 9         | 1506     | 1508     | 13820   | 11.96          |
-| 10. astar_search with h_pg_levelsum              | 9         | 86       | 88       | 841     | 163.02         |
+| 6. recursive_best_first_search_with_h_1          | --        | --       | --       | --      | timeout        |
+| 7. greedy_best_first_graph_search_with_h_1       | 21        | 998      | 1000     | 8982    | 7.427          |
+| 8. astar_search_with_h_1                         | 9         | 4853     | 4855     | 44041   | 41.251         |
+| 9. astar_search_with_h_ignore_preconditions      | 9         | 1506     | 1508     | 13820   | 11.96          |
+| 10. astar_search_with_h_pg_levelsum              | 9         | 86       | 88       | 841     | 163.02         |
 
-#### P3
+### P3
 
 | Heuristic                                        |Plan length|Expansions|Goal Tests|New Nodes|Time elapsed sec|
 |--------------------------------------------------|-----------|----------|----------|---------|----------------|
@@ -118,10 +118,14 @@ Unload(C1, P1, JFK)
 | 3. depth_first_graph_search                      | 392       | 408      | 409      | 3364    | 1.969          |
 | 4. depth_limited_search                          | --        | --       | --       | --      | timeout        |
 | 5. uniform_cost_search                           | 12        | 18223    | 18225    | 159618  | 342.12         |
-| 6. recursive_best_first_search with h_1          | --        | --       | --       | --      | timeout        |
-| 7. greedy_best_first_graph_search with h_1       | 22        | 5578     | 5580     | 49150   | 96.17          |
-| 8. astar_search with h_1                         | 12        | 18223    | 18225    | 159618  | 340.055        |
-| 9. astar_search with h_ignore_preconditions      | 12        | 5118     | 5120     | 45650   | 83.97          |
-| 10. astar_search with h_pg_levelsum              | --        | --       | --       | --      | timeout        |
+| 6. recursive_best_first_search_with_h_1          | --        | --       | --       | --      | timeout        |
+| 7. greedy_best_first_graph_search_with h_1       | 22        | 5578     | 5580     | 49150   | 96.17          |
+| 8. astar_search_with_h_1                         | 12        | 18223    | 18225    | 159618  | 340.055        |
+| 9. astar_search_with_h_ignore_preconditions      | 12        | 5118     | 5120     | 45650   | 83.97          |
+| 10. astar_search_with_h_pg_levelsum              | --        | --       | --       | --      | timeout        |
 
 
+## Analysis
+
+- Since `h_1` is just a constant, it doesn't have additional information about the states, so the first 8 searches are uninformed.
+- Depth fist graph search runs fast but the solution is not optimal
