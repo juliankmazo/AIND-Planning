@@ -129,7 +129,8 @@ Unload(C1, P1, JFK)
 ## Analysis
 
 - Since `h_1` is just a constant, it doesn't have additional information about the states, so the first 8 searches are uninformed.
-- Depth first graph search runs fast but the solution is not optimal.
-- A* with level sum heuristics reduces significantly the search space (At least for p1 and p2) thanks to GRAPHPLAN and the level-sum algorithm. But the time consumption is large (In p3 didn't finish). Running the heuristics increases the time consumption of the algorithm.
+- Breath first search and uniform cost search has large node expansions because they don't have heuristics to reduce the search space.
+- Depth first graph search runs fast but the solution is not optimal. This is because the algorithm return the first solution that fulfill the goal test.
+- A* with level sum has lower node expansions thanks to the heuristics that reduces significantly the search space (At least for p1 and p2) thanks to GRAPHPLAN and the level-sum algorithm. But the time consumption is large (In p3 didn't finish). Running the heuristics increases the time consumption of the algorithm.
 - With A* and ignore preconditions heuristics we can see a search space reduction with more acceptable time consumption. This is because the heuristics is cheaper to calculate. Also the solution is optimal, so it looks like a pretty good choice in terms of search space reduction vs time consumption.
 - Which one is the best? I would say it depends. Fos small problems a uninformed search like BF gives an optimal solution with low time consumption. Larger problems will need a costless heuristic that decreases the search space but since it doesn't cost too much to calculate, finds the solution in a reasonable time.
